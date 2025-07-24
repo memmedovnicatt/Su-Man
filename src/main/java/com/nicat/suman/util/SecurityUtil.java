@@ -1,6 +1,7 @@
 package com.nicat.suman.util;
 
 import com.nicat.suman.model.dto.request.LoginRequest;
+import com.nicat.suman.model.exception.UnauthorizedException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -33,7 +34,7 @@ public class SecurityUtil {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (BadCredentialsException ex) {
-            throw new RuntimeException("Invalid username or password");
+            throw new UnauthorizedException("Invalid username or password");
         }
         log.info("authentication manager with successfully authenticate for " +
                 "this username: {}", loginRequest.getUsername());

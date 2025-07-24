@@ -3,6 +3,7 @@ package com.nicat.suman.mapper;
 import com.nicat.suman.dao.entity.Customer;
 import com.nicat.suman.model.dto.request.CustomerUpdateRequest;
 import com.nicat.suman.model.dto.response.CustomerAddResponse;
+import com.nicat.suman.model.dto.response.CustomerResponse;
 import com.nicat.suman.model.dto.response.CustomerSearchResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -20,4 +21,6 @@ public interface CustomerMapper {
                            @MappingTarget Customer customer);
 
     List<CustomerSearchResponse> toCustomerSearchResponse(List<Customer> customerList);
+
+    CustomerResponse toCustomerResponse(Customer currenCustomer);
 }

@@ -31,6 +31,10 @@ public class User implements UserDetails {
     String phoneNumber;
     LocalDateTime createdAt;
 
+    //order relation
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<Order> orders;
+
     @Enumerated(EnumType.STRING)
     Role role;
 

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "customers")
@@ -22,6 +24,10 @@ public class Customer {
     String phoneNumber;
     Double price; // for carboy
     String currency;
+
+    //order relation
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<Order> orders;
 
     @PrePersist
     protected void onCreate() {

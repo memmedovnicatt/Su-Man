@@ -6,6 +6,7 @@ import com.nicat.suman.mapper.CustomerMapper;
 import com.nicat.suman.model.dto.request.CustomerAddRequest;
 import com.nicat.suman.model.dto.request.CustomerUpdateRequest;
 import com.nicat.suman.model.dto.response.CustomerAddResponse;
+import com.nicat.suman.model.dto.response.CustomerResponse;
 import com.nicat.suman.model.dto.response.CustomerSearchResponse;
 import com.nicat.suman.model.exception.NotFoundException;
 import lombok.AccessLevel;
@@ -65,18 +66,31 @@ public class CustomerService {
         log.info("Searching for customers by name: '{}' and surname: '{}'", name, surname);
         List<Customer> customerList = customerRepository.findByNameAndSurname(name, surname)
                 .orElseThrow(() -> new NotFoundException("not found"));
-        //listin bos gelme ehtimalinda exception at
+        if (customerList == null || customerList.isEmpty()) {
+            log.warn("Customer list is empty or null. Cannot proceed with operation.");
+            throw new NotFoundException("No customers found.");
+        }
         log.info("Found {} customer(s)", customerList.size());
         return customerMapper.toCustomerSearchResponse(customerList);
-
     }
 
     public List<CustomerSearchResponse> searchByPhoneNumber(String phoneNumber) {
         log.info("Searching for customers by phone number: {}", phoneNumber);
         List<Customer> customerList = customerRepository.findByPhoneNumber(phoneNumber)
                 .orElseThrow(() -> new NotFoundException("not found"));
-        //listin bos gelme ehtimalinda exception at
+        if (customerList == null || customerList.isEmpty()) {
+            log.warn("Customer list was empty or null. Can not proceed with operation.");
+            throw new NotFoundException("No customers found.");
+        }
         log.info("Found {} customer(s) with phone number {}", customerList.size(), phoneNumber);
         return customerMapper.toCustomerSearchResponse(customerList);
+    }
+
+    public CustomerResponse getById(Long id) {
+        log.info("getById method was started for CustomerService with id:{}", id);
+        Customer currenCustomer = customerRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("customer id:" + id + " was not found"));
+        log.info("customer was found with id:{}", id);
+        return customerMapper.toCustomerResponse(currenCustomer);
     }
 }
