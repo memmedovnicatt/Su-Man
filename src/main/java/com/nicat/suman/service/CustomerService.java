@@ -9,12 +9,18 @@ import com.nicat.suman.model.dto.response.CustomerAddResponse;
 import com.nicat.suman.model.dto.response.CustomerResponse;
 import com.nicat.suman.model.dto.response.CustomerSearchResponse;
 import com.nicat.suman.model.exception.NotFoundException;
+import com.nicat.suman.util.ExcelExport;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.*;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -24,11 +30,11 @@ import java.util.List;
 public class CustomerService {
     CustomerRepository customerRepository;
     CustomerMapper customerMapper;
+    ExcelExport excelExport;
 
     public CustomerAddResponse add(CustomerAddRequest customerAddRequest) {
         //phone number mutleq ferqli olmalidir
-        log.info("Starting to add a new customer with name: {} {}",
-                customerAddRequest.getName(), customerAddRequest.getSurname());
+        log.info("Starting to add a new customer");
         Customer customer = Customer.builder()
                 .name(customerAddRequest.getName())
                 .surname(customerAddRequest.getSurname())
@@ -92,5 +98,18 @@ public class CustomerService {
                 .orElseThrow(() -> new NotFoundException("customer id:" + id + " was not found"));
         log.info("customer was found with id:{}", id);
         return customerMapper.toCustomerResponse(currenCustomer);
+    }
+
+    public void generateExcel(HttpServletResponse response) throws IOException {
+        List<Customer> customers = customerRepository.findAll();
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("Customers Info");
+        excelExport.createHeaderRow(workbook, sheet);
+        excelExport.createDataRows(workbook, sheet, customers);
+        excelExport.autoSizeColumns(sheet);
+        ServletOutputStream ops = response.getOutputStream();
+        workbook.write(ops);
+        workbook.close();
+        ops.close();
     }
 }

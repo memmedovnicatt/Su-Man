@@ -1,18 +1,17 @@
 package com.nicat.suman.controller;
 
 
-import com.nicat.suman.dao.entity.Customer;
 import com.nicat.suman.model.dto.request.CustomerAddRequest;
 import com.nicat.suman.model.dto.request.CustomerUpdateRequest;
 import com.nicat.suman.model.dto.response.CustomerAddResponse;
 import com.nicat.suman.model.dto.response.CustomerResponse;
 import com.nicat.suman.model.dto.response.CustomerSearchResponse;
 import com.nicat.suman.service.CustomerService;
-import com.nicat.suman.util.SecurityUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -20,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "Customer Controller", description = "Handles customer operations")
@@ -29,7 +30,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomerController {
     CustomerService customerService;
-
 
     @Operation(summary = "Add a new customer", description = "Creates a new customer with provided data")
     @ApiResponses(value = {
@@ -84,7 +84,6 @@ public class CustomerController {
         return customerService.searchByNameAndSurname(name, surname);
     }
 
-
     @Operation(summary = "Search customer by phone number",
             description = "Returns customers matching given phone number")
     @ApiResponse(responseCode = "200", description = "Search completed successfully")
@@ -103,5 +102,18 @@ public class CustomerController {
     public ResponseEntity<CustomerResponse> getById(@PathVariable Long id) {
         CustomerResponse customerResponse = customerService.getById(id);
         return ResponseEntity.ok(customerResponse);
+    }
+
+    @Operation(summary = "Export customers to Excel",
+            description = "This endpoint exports a customer list in " +
+                    ".xls format and presents it to the user as a download.")
+    @GetMapping("/export")
+    public void generateExcel(HttpServletResponse response) throws IOException {
+        LocalDate today = LocalDate.now();
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment;filename=customers_" + today + ".xls";
+        response.setHeader(headerKey, headerValue);
+        customerService.generateExcel(response);
     }
 }

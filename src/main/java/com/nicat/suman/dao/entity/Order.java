@@ -4,6 +4,9 @@ import com.nicat.suman.model.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -41,6 +44,8 @@ public class Order {
         }
     }
 
-    //LocalDate date
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    LocalDate orderDate;
+
     //LocalTime time
 }

@@ -46,6 +46,9 @@ dependencies {
     //for security
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    //for apache poi(export to excel)
+    implementation("org.apache.poi:poi:5.4.1")
+
 
 //    //for jwt
 //    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'

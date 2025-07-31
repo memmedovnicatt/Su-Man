@@ -1,11 +1,13 @@
 package com.nicat.suman.model.dto.response;
 
-import lombok.AccessLevel;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderUpdateResponse {
     String customerAddress;
     String customerName;

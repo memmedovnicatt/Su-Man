@@ -6,6 +6,7 @@ import com.nicat.suman.dao.entity.User;
 import com.nicat.suman.dao.repository.CustomerRepository;
 import com.nicat.suman.dao.repository.OrderRepository;
 import com.nicat.suman.dao.repository.UserRepository;
+import com.nicat.suman.mapper.OrderMapper;
 import com.nicat.suman.model.dto.request.OrderAddRequest;
 import com.nicat.suman.model.dto.request.OrderUpdateRequest;
 import com.nicat.suman.model.dto.response.OrderAddResponse;
@@ -26,8 +27,12 @@ public class OrderService {
     CustomerRepository customerRepository;
     UserRepository userRepository;
     OrderRepository orderRepository;
+    OrderMapper orderMapper;
 
     public OrderAddResponse add(OrderAddRequest orderAddRequest) {
+        log.info("add method was started for OrderService with this request:{}",
+                orderAddRequest);
+        isValidCount(orderAddRequest.getCarboyCount());
         Customer currentCustomer = customerRepository.findById(orderAddRequest.getCustomerId())
                 .orElseThrow(() -> new NotFoundException
                         ("customer was not found with id:" + orderAddRequest.getCustomerId()));
@@ -36,24 +41,16 @@ public class OrderService {
                 .orElseThrow(() -> new NotFoundException
                         ("courier was not found with id:" + orderAddRequest.getCourierId()));
         log.info("courier was found with id:{}", orderAddRequest.getCourierId());
-
         Long totalCarboyCount = orderAddRequest.getCarboyCount();
-        Double totalCarboyPrice = totalCarboyCount * currentCustomer.getPrice();
         Order order = Order.builder()
-                .price(totalCarboyPrice)
+                .price(totalCarboyCount * currentCustomer.getPrice())
                 .customer(currentCustomer)
                 .carboyCount(totalCarboyCount)
                 .user(courier)
+                .orderDate(orderAddRequest.getOrderDate())
                 .build();
         orderRepository.save(order);
-        OrderAddResponse orderAddResponse = new OrderAddResponse();
-        orderAddResponse.setCustomerAddress(currentCustomer.getAddress());
-        orderAddResponse.setCustomerName(currentCustomer.getName());
-        orderAddResponse.setCustomerSurname(currentCustomer.getSurname());
-        orderAddResponse.setCustomerPhoneNumber(currentCustomer.getPhoneNumber());
-        orderAddResponse.setTotalCarboyCount(totalCarboyCount);
-        orderAddResponse.setTotalPrice(totalCarboyPrice);
-        return orderAddResponse;
+        return orderMapper.toOrderAddResponse(order);
     }
 
     public void delete(Long id) {
@@ -66,39 +63,49 @@ public class OrderService {
     public OrderUpdateResponse update(Long id, OrderUpdateRequest orderUpdateRequest) {
         Order currentOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("order was not found with id:" + id));
-        if (orderUpdateRequest.getCarboyCount() == null) {
-            log.warn("carboyCount is null");
-            throw new NullPointerException("carboyCount is null");
-        }
+        isValidCount(orderUpdateRequest.getCarboyCount());
+
         Long customerId = currentOrder.getCustomer().getId();
         Double carboyPrice = currentOrder.getCustomer().getPrice();
         Double totalCarboyPrice = orderUpdateRequest.getCarboyCount() * carboyPrice;
         log.info("customerId:{} ", customerId);
         log.info("carboyPrice:{} ", carboyPrice);
+
         currentOrder.setCarboyCount(orderUpdateRequest.getCarboyCount());
         currentOrder.setPrice(orderUpdateRequest.getCarboyCount() * carboyPrice);
         orderRepository.save(currentOrder);
-        OrderUpdateResponse orderUpdateResponse = new OrderUpdateResponse();
-        orderUpdateResponse.setCustomerAddress(currentOrder.getCustomer().getAddress());
-        orderUpdateResponse.setCustomerName(currentOrder.getCustomer().getName());
-        orderUpdateResponse.setCustomerPhoneNumber(currentOrder.getCustomer().getPhoneNumber());
-        orderUpdateResponse.setTotalPrice(totalCarboyPrice);
-        orderUpdateResponse.setTotalCarboyCount(orderUpdateRequest.getCarboyCount());
-        orderUpdateResponse.setCustomerSurname(currentOrder.getCustomer().getSurname());
-        return orderUpdateResponse;
+
+        return OrderUpdateResponse.builder()
+                .customerAddress(currentOrder.getCustomer().getAddress())
+                .customerName(currentOrder.getCustomer().getName())
+                .customerSurname(currentOrder.getCustomer().getSurname())
+                .customerPhoneNumber(currentOrder.getCustomer().getPhoneNumber())
+                .totalPrice(totalCarboyPrice)
+                .totalCarboyCount(orderUpdateRequest.getCarboyCount())
+                .build();
     }
 
     public OrderResponse getById(Long id) {
         Order currentOrder = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("order was not found with id:" + id));
         log.info("order id:{} was found", id);
-        OrderResponse orderResponse = new OrderResponse();
-        orderResponse.setCustomerAddress(currentOrder.getCustomer().getAddress());
-        orderResponse.setCustomerName(currentOrder.getCustomer().getName());
-        orderResponse.setCustomerPhoneNumber(currentOrder.getCustomer().getPhoneNumber());
-        orderResponse.setTotalPrice(currentOrder.getPrice());
-        orderResponse.setTotalCarboyCount(currentOrder.getCarboyCount());
-        orderResponse.setCustomerSurname(currentOrder.getCustomer().getSurname());
-        return orderResponse;
+
+        return OrderResponse.builder()
+                .customerAddress(currentOrder.getCustomer().getAddress())
+                .customerName(currentOrder.getCustomer().getName())
+                .customerSurname(currentOrder.getCustomer().getSurname())
+                .customerPhoneNumber(currentOrder.getCustomer().getPhoneNumber())
+                .totalPrice(currentOrder.getPrice())
+                .totalCarboyCount(currentOrder.getCarboyCount())
+                .build();
+    }
+
+    // util methods
+    public static boolean isValidCount(Long carboyCount) {
+        if (carboyCount == null || carboyCount < 0) {
+            log.warn("carboy count is null");
+            throw new NullPointerException("carboyCount is null");
+        }
+        return true;
     }
 }

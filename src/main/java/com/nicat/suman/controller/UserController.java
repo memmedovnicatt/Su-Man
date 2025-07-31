@@ -4,20 +4,18 @@ import com.nicat.suman.model.dto.request.LoginRequest;
 import com.nicat.suman.model.dto.request.RegisterRequest;
 import com.nicat.suman.model.dto.response.LoginResponse;
 import com.nicat.suman.model.dto.response.RegisterResponse;
+import com.nicat.suman.model.dto.response.UserResponse;
 import com.nicat.suman.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "User Controller", description = "Handles user registration and login operations")
@@ -51,5 +49,13 @@ public class UserController {
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         LoginResponse loginResponse = userService.login(loginRequest);
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @Operation(summary = "Get user by ID",
+            description = "Fetches a single user by their ID")
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
+        UserResponse userResponse = userService.getById(id);
+        return ResponseEntity.ok(userResponse);
     }
 }

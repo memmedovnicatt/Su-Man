@@ -3,6 +3,7 @@ package com.nicat.suman.mapper;
 import com.nicat.suman.dao.entity.User;
 import com.nicat.suman.model.dto.response.LoginResponse;
 import com.nicat.suman.model.dto.response.RegisterResponse;
+import com.nicat.suman.model.dto.response.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
@@ -13,4 +14,6 @@ public interface UserMapper {
     RegisterResponse toRegisterResponseDto(User user);
 
     LoginResponse toLoginResponse(User user);
+
+    UserResponse toUserResponse(User user);
 }
