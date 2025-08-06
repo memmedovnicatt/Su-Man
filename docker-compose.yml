@@ -11,9 +11,11 @@ services:
       POSTGRES_DB: SuManDB
     ports:
       - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 
   app:
-    build: .
+    image: agilazizovf/suman
     container_name: sumanback
     restart: always
     ports:
@@ -24,3 +26,6 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/SuManDB
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
+
+volumes:
+  pgdata:
