@@ -21,22 +21,18 @@ jobs:
 
       - name: Grant execute permission for Gradle wrapper
         run: chmod +x ./gradlew
-        working-directory: ./sumanback
 
       - name: Build with Gradle
         run: ./gradlew build -x test
-        working-directory: ./sumanback
 
       - name: Docker Login
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
       - name: Build Docker Image
         run: docker build -t agilazizovf/sumanback .
-        working-directory: ./sumanback
 
       - name: Push Docker Image
         run: docker push agilazizovf/sumanback
-        working-directory: ./sumanback
 
   deploy:
     needs: build-and-test
