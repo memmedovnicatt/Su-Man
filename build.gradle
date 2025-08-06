@@ -66,6 +66,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
+
+jar {
+    archiveBaseName.set("sumanback")
+}
+
+
 tasks.named('test') {
     useJUnitPlatform()
 }
