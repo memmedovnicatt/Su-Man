@@ -10,5 +10,14 @@ services:
       - POSTGRES_DB=SuManDB
     ports:
       - "5432:5432"
-    volumes:
-      - ../../docker-volumes/auth-flow-db:/var/lib/postgresql/data
+
+  app:
+    image: agilazizovf/suman
+    depends_on:
+      - db
+    ports:
+      - "9090:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/SuManDB
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: root
