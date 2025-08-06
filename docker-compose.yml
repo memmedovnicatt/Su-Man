@@ -15,7 +15,9 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   app:
-    image: agilazizovf/suman
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: sumanback
     restart: always
     ports:
