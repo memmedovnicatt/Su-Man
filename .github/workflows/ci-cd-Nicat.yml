@@ -19,8 +19,12 @@ jobs:
           java-version: 21
           distribution: 'temurin'
 
-      - name: Build with Maven
-        run: mvn clean package -DskipTests
+      - name: Grant execute permission for Gradle wrapper
+        run: chmod +x ./gradlew
+        working-directory: ./sumanback
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
         working-directory: ./sumanback
 
       - name: Docker Login
@@ -30,13 +34,12 @@ jobs:
         run: docker build -t agilazizovf/sumanback .
         working-directory: ./sumanback
 
-
       - name: Push Docker Image
         run: docker push agilazizovf/sumanback
         working-directory: ./sumanback
 
   deploy:
-    needs: build-and-test  # Deploy only if the 'build-and-test' job succeeds
+    needs: build-and-test
     runs-on: ubuntu-latest
 
     steps:
