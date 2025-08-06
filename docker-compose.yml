@@ -3,10 +3,11 @@ services:
   db:
     container_name: su-man
     image: postgres:14.5
-    restart: no
+    restart: always
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=SuManDB
     ports:
       - "5432:5432"
     volumes:
