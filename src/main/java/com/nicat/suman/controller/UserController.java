@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@Tag(name = "User Controller", description = "Handles user registration and login operations")
+@Tag(name = "User Controller", description = "Handles user operations")
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
