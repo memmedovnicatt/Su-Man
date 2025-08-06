@@ -1,13 +1,13 @@
-#version: '3.8'
-#services:
-#  db:
-#    container_name: su-man
-#    image: postgres:14.5
-#    restart: no
-#    environment:
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#    ports:
-#      - "5433:5432"
-#    volumes:
-#      - ../../docker-volumes/auth-flow-db:/var/lib/postgresql/data
+version: '3.8'
+services:
+  db:
+    container_name: su-man
+    image: postgres:14.5
+    restart: no
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - ../../docker-volumes/auth-flow-db:/var/lib/postgresql/data
