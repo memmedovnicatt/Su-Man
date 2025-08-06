@@ -18,10 +18,10 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authorize ->
-                        authorize
-                                .requestMatchers(permitAllUrls).permitAll()
-                                .anyRequest().authenticated()
+                .headers(headers -> headers.frameOptions().disable()) // <-- ƏLAVƏ OLUNMALIDIR!
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(permitAllUrls).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
@@ -42,6 +42,7 @@ public class SecurityConfig {
             "/customers/**",
             "/orders/**",
             "/couriers/**",
-            "/api/v1/**"
+            "/api/v1/**",
+            "/h2-console/**"
     };
 }

@@ -37,6 +37,8 @@ dependencies {
     //for postgresql
     runtimeOnly 'org.postgresql:postgresql'
 
+    runtimeOnly 'com.h2database:h2'
+
     //for swagger
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.7.0'
 
