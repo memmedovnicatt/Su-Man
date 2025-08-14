@@ -39,7 +39,7 @@ public class UserService {
                 .phoneNumber(registerRequest.getPhoneNumber())
                 .role(Role.COURIER)
                 .surname(registerRequest.getSurname())
-                .username(registerRequest.getSurname())
+                .username(registerRequest.getUsername())
                 .createdAt(LocalDateTime.now())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .build();
