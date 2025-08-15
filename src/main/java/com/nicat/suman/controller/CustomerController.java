@@ -24,7 +24,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "Customer Controller", description = "Handles customer operations")
-//@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/customers")
 @RequiredArgsConstructor
