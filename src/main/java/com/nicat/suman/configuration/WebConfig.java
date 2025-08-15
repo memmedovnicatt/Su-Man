@@ -5,15 +5,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@Configuration
 public class WebConfig {
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/") // Bütün endpointlər üçün
-                        .allowedOrigins("*") // İstənilən mənşə üçün
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"); // İcazə verilən metodlar
+                registry.addMapping("/**") // Bütün endpointlər
+                        .allowedOrigins("http://localhost:5173") // Yalnız bu mənşə
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH");
             }
         };
     }
