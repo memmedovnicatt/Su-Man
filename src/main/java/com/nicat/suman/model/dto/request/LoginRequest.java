@@ -11,12 +11,12 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoginRequest {
 
-    @NotEmpty(message = "Username must not be empty")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
-    @Column(columnDefinition = "VARCHAR(255)")
+//    @NotEmpty(message = "Username must not be empty")
+//    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+//    @Column(columnDefinition = "VARCHAR(255)")
     String username;
 
-    @Size(min = 5, max = 30, message = "Password must be between 3 adn 30 characters")
-    @NotEmpty(message = "Password cannot be empty")
+//    @Size(min = 5, max = 30, message = "Password must be between 3 adn 30 characters")
+//    @NotEmpty(message = "Password cannot be empty")
     String password;
 }
