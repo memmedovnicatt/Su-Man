@@ -19,8 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "User Controller", description = "Handles user operations")
-@CrossOrigin(origins = "http://localhost:5173")
-@RestController
+@MyRestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
