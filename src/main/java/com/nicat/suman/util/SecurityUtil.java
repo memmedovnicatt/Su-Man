@@ -34,6 +34,7 @@ public class SecurityUtil {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (BadCredentialsException ex) {
+            log.info("Invalid username or password");
             throw new UnauthorizedException("Invalid username or password");
         }
         log.info("authentication manager with successfully authenticate for " +

@@ -9,6 +9,7 @@ import com.nicat.suman.model.dto.response.LoginResponse;
 import com.nicat.suman.model.dto.response.RegisterResponse;
 import com.nicat.suman.model.dto.response.UserResponse;
 import com.nicat.suman.model.enums.Role;
+import com.nicat.suman.model.exception.AlreadyExistsException;
 import com.nicat.suman.model.exception.NotFoundException;
 import com.nicat.suman.util.SecurityUtil;
 import jakarta.validation.Valid;
@@ -32,7 +33,17 @@ public class UserService {
     SecurityUtil securityUtil;
 
     public RegisterResponse register(@Valid RegisterRequest registerRequest) {
-        //phone number ve username unikalligi temin et
+        boolean existPhone = userRepository.existsByPhoneNumber(registerRequest.getPhoneNumber());
+        boolean existUsername = userRepository.existsByUsername(registerRequest.getUsername());
+        if (existPhone){
+            log.info("phoneNumber:{} is already exist",registerRequest.getPhoneNumber());
+            throw new AlreadyExistsException("phoneNumber:"+registerRequest.getPhoneNumber()+" is already exist");
+        }
+
+        if (existUsername){
+            log.info("username:{} is already exist",registerRequest.getUsername());
+            throw new AlreadyExistsException("username:"+registerRequest.getUsername()+" is already exist");
+        }
         log.info("Starting user registration process");
         User user = User.builder()
                 .name(registerRequest.getName())
