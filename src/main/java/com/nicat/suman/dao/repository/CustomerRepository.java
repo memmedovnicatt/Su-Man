@@ -18,4 +18,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     @Query("SELECT c FROM Customer c WHERE " +
             "c.phoneNumber LIKE CONCAT('%', :phoneNumber, '%')")
     Optional<List<Customer>> findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
+    boolean existsByPhoneNumber(String phoneNumber);
 }

@@ -6,8 +6,10 @@ import com.nicat.suman.mapper.CustomerMapper;
 import com.nicat.suman.model.dto.request.CustomerAddRequest;
 import com.nicat.suman.model.dto.request.CustomerUpdateRequest;
 import com.nicat.suman.model.dto.response.CustomerAddResponse;
+import com.nicat.suman.model.dto.response.CustomerListResponse;
 import com.nicat.suman.model.dto.response.CustomerResponse;
 import com.nicat.suman.model.dto.response.CustomerSearchResponse;
+import com.nicat.suman.model.exception.AlreadyExistsException;
 import com.nicat.suman.model.exception.NotFoundException;
 import com.nicat.suman.util.ExcelExport;
 import jakarta.servlet.ServletOutputStream;
@@ -33,7 +35,11 @@ public class CustomerService {
     ExcelExport excelExport;
 
     public CustomerAddResponse add(CustomerAddRequest customerAddRequest) {
-        //phone number mutleq ferqli olmalidir
+        boolean exitPhone = customerRepository.existsByPhoneNumber(customerAddRequest.getPhoneNumber());
+        if (exitPhone) {
+            log.info("phoneNumber:{} is already exist", customerAddRequest.getPhoneNumber());
+            throw new AlreadyExistsException("phoneNumber:" + customerAddRequest.getPhoneNumber() + " is already exist");
+        }
         log.info("Starting to add a new customer");
         Customer customer = Customer.builder()
                 .name(customerAddRequest.getName())
@@ -111,5 +117,15 @@ public class CustomerService {
         workbook.write(ops);
         workbook.close();
         ops.close();
+    }
+
+    public List<CustomerListResponse> getAll() {
+        log.info("getAll method was started for CustomerService");
+        List<Customer> customerList = customerRepository.findAll();
+        if (customerList.isEmpty()){
+            log.info("customer not found");
+            throw new NotFoundException("customer not found");
+        }
+        return customerMapper.toCustomerListResponse(customerList);
     }
 }
