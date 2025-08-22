@@ -27,32 +27,22 @@ public class OrderController {
     OrderService orderService;
 
     @Operation(summary = "Create a new order", description = "Adds a new order with given request data")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Order created successfully"),
-            @ApiResponse(responseCode = "400", description = "Invalid order data")
-    })
     @PostMapping("/add")
     public ResponseEntity<OrderAddResponse> add(@RequestBody OrderAddRequest orderAddRequest) {
         OrderAddResponse orderAddResponse = orderService.add(orderAddRequest);
         return ResponseEntity.ok(orderAddResponse);
     }
 
+
     @Operation(summary = "Delete an order", description = "Deletes the order by ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Order deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Order not found")
-    })
     @DeleteMapping("/delete/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         orderService.delete(id);
     }
 
+
     @Operation(summary = "Update an order", description = "Updates an existing order by ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Order updated successfully"),
-            @ApiResponse(responseCode = "404", description = "Order not found")
-    })
     @PatchMapping("/update/{id}")
     public ResponseEntity<OrderUpdateResponse> update(@PathVariable Long id,
                                                       @RequestBody OrderUpdateRequest orderUpdateRequest) {
@@ -61,10 +51,6 @@ public class OrderController {
     }
 
     @Operation(summary = "Get order by ID", description = "Retrieves order details by ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Order retrieved successfully"),
-            @ApiResponse(responseCode = "404", description = "Order not found")
-    })
     @GetMapping("/{id}")
     public ResponseEntity<OrderResponse> getById(@PathVariable Long id) {
         OrderResponse orderResponse = orderService.getById(id);
