@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -16,4 +17,7 @@ public class OrderAddRequest {
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     LocalDate orderDate;
+
+    String orderTime;
+
 }

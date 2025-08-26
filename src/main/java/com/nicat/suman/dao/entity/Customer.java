@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,11 @@ public class Customer {
     String phoneNumber;
     Double price; // for carboy
     String currency;
+    LocalDateTime createAt;
+    LocalDateTime updateAt;
+    LocalDateTime deleteAt;
+    Integer status;
+    Long loanCarboyCount;
 
     //order relation
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -33,6 +39,9 @@ public class Customer {
     protected void onCreate() {
         if (currency == null) {
             currency = "AZN";
+        }
+        if (loanCarboyCount == null) {
+            loanCarboyCount = 0L;
         }
     }
 }

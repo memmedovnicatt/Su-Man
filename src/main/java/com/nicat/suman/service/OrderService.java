@@ -10,14 +10,19 @@ import com.nicat.suman.mapper.OrderMapper;
 import com.nicat.suman.model.dto.request.OrderAddRequest;
 import com.nicat.suman.model.dto.request.OrderUpdateRequest;
 import com.nicat.suman.model.dto.response.OrderAddResponse;
+import com.nicat.suman.model.dto.response.OrderAllResponse;
 import com.nicat.suman.model.dto.response.OrderResponse;
 import com.nicat.suman.model.dto.response.OrderUpdateResponse;
+import com.nicat.suman.model.enums.OrderStatus;
 import com.nicat.suman.model.exception.NotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +53,7 @@ public class OrderService {
                 .carboyCount(totalCarboyCount)
                 .user(courier)
                 .orderDate(orderAddRequest.getOrderDate())
+                .orderTime(orderAddRequest.getOrderTime())
                 .build();
         orderRepository.save(order);
         return orderMapper.toOrderAddResponse(order);
@@ -57,7 +63,9 @@ public class OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("order was not found with id:" + id));
         log.info("order was found with id:{}", id);
-        orderRepository.deleteById(id);
+        order.setOrderStatus(OrderStatus.REJECTED);
+        order.setDeleteAt(LocalDateTime.now());
+        orderRepository.save(order);
     }
 
     public OrderUpdateResponse update(Long id, OrderUpdateRequest orderUpdateRequest) {
@@ -73,6 +81,7 @@ public class OrderService {
 
         currentOrder.setCarboyCount(orderUpdateRequest.getCarboyCount());
         currentOrder.setPrice(orderUpdateRequest.getCarboyCount() * carboyPrice);
+        currentOrder.setUpdateAt(LocalDateTime.now());
         orderRepository.save(currentOrder);
 
         return OrderUpdateResponse.builder()
@@ -107,5 +116,26 @@ public class OrderService {
             throw new NullPointerException("carboyCount is null");
         }
         return true;
+    }
+
+    public List<OrderAllResponse> getAll() {
+        log.info("getAll method was started for OrderService");
+        List<Order> orders = orderRepository.findAllWithCustomerAndCourier();
+        if (orders.isEmpty()) {
+            log.info("order is empty");
+            throw new NotFoundException("orders was not found");
+        }
+        return orders.stream()
+                .map(o -> new OrderAllResponse(
+                        o.getCustomer().getName() + " " + o.getCustomer().getSurname(),
+                        o.getCustomer().getPhoneNumber(),
+                        o.getCustomer().getAddress(),
+                        o.getOrderDate(),
+                        o.getPrice(),
+                        o.getCarboyCount(),
+                        o.getUser().getName() + " " + o.getUser().getName(),
+                        o.getOrderStatus()
+                ))
+                .toList();
     }
 }

@@ -92,4 +92,6 @@ public class CustomerController {
         List<CustomerListResponse> customerListResponses = customerService.getAll();
         return ResponseEntity.ok(customerListResponses);
     }
+
+    //borcu olan musterileri getiren endpoint
 }

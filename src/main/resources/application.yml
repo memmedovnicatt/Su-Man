@@ -21,8 +21,9 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     defer-datasource-initialization: true
+    show-sql: true
   h2:
     console:
       enabled: true

@@ -3,12 +3,11 @@ package com.nicat.suman.controller;
 import com.nicat.suman.model.dto.request.OrderAddRequest;
 import com.nicat.suman.model.dto.request.OrderUpdateRequest;
 import com.nicat.suman.model.dto.response.OrderAddResponse;
+import com.nicat.suman.model.dto.response.OrderAllResponse;
 import com.nicat.suman.model.dto.response.OrderResponse;
 import com.nicat.suman.model.dto.response.OrderUpdateResponse;
 import com.nicat.suman.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +15,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Order Controller",
         description = "Handles order creation, update, deletion and retrieval")
@@ -56,4 +57,11 @@ public class OrderController {
         OrderResponse orderResponse = orderService.getById(id);
         return ResponseEntity.ok(orderResponse);
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<OrderAllResponse>> getAll() {
+        List<OrderAllResponse> orderAllResponse = orderService.getAll();
+        return ResponseEntity.ok(orderAllResponse);
+    }
+
 }

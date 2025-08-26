@@ -23,6 +23,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -47,6 +48,8 @@ public class CustomerService {
                 .phoneNumber(customerAddRequest.getPhoneNumber())
                 .price(customerAddRequest.getPrice())
                 .address(customerAddRequest.getAddress())
+                .createAt(LocalDateTime.now())
+                .status(1)
                 .build();
         customerRepository.save(customer);
         log.info("Customer successfully saved with ID: {}", customer.getId());
@@ -57,7 +60,9 @@ public class CustomerService {
         log.info("Attempting to delete customer with ID: {}", id);
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Customer id:" + id + " was not found"));
-        customerRepository.deleteById(id);
+        customer.setStatus(0);
+        customer.setDeleteAt(LocalDateTime.now());
+        customerRepository.save(customer);
         log.info("Customer with ID: {} successfully deleted", id);
     }
 
@@ -65,6 +70,7 @@ public class CustomerService {
         log.info("Starting update for customer with ID: {}", id);
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Customer id:" + id + " was not found"));
+        customer.setUpdateAt(LocalDateTime.now());
         customerMapper.updateEntityField(customerUpdateRequest, customer);
         customerRepository.save(customer);
         log.info("Customer with ID: {} successfully updated", id);
@@ -122,7 +128,7 @@ public class CustomerService {
     public List<CustomerListResponse> getAll() {
         log.info("getAll method was started for CustomerService");
         List<Customer> customerList = customerRepository.findAll();
-        if (customerList.isEmpty()){
+        if (customerList.isEmpty()) {
             log.info("customer not found");
             throw new NotFoundException("customer not found");
         }
