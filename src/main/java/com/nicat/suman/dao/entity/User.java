@@ -30,6 +30,9 @@ public class User implements UserDetails {
     String password;
     String phoneNumber;
     LocalDateTime createdAt;
+    Integer status;
+    LocalDateTime createAt;
+    LocalDateTime deleteAt;
 
     //order relation
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
