@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/SuManDB
+    url: jdbc:postgresql://postgres-db:5432/SuManDB
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: root
