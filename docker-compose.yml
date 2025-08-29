@@ -19,7 +19,6 @@ services:
     container_name: suman-app
     restart: always
     volumes:
-      # hazır JAR faylını serverdə /root qovluğuna atacaqsan
       - /root/Su-Man-0.0.1-SNAPSHOT.jar:/app.jar
     command: ["java", "-jar", "/app.jar"]
     ports:
