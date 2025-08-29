@@ -71,9 +71,4 @@ public class OrderController {
     public Long getOrderCount(){
         return orderService.countOrders();
     }
-
-    @GetMapping("/loan/count")
-    public Long getLoanOrderCount(){
-        return orderService.getLoanOrderCount();
-    }
 }
