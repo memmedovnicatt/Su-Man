@@ -8,13 +8,13 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_DB: SuManDB
     ports:
-      - "5433:5432"
+      - "5433:5432"   # host üçün 5433, container içində yenə 5432
     volumes:
       - suman_pgdata:/var/lib/postgresql/data
     networks:
       - suman-network
 
-  spring-app:
+  suman-app:
     image: openjdk:21-jdk-slim
     container_name: suman-app
     restart: always
