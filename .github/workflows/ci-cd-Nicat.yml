@@ -49,4 +49,4 @@ jobs:
             docker pull agilazizovf/sumanback
             docker stop sumanback || true
             docker rm sumanback || true
-            docker run -d --name sumanback -p 9091:9090 agilazizovf/sumanback
+            docker run -d --name sumanback -p 9090:9090 agilazizovf/sumanback
