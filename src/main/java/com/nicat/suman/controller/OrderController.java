@@ -76,7 +76,4 @@ public class OrderController {
     public Long getLoanOrderCount(){
         return orderService.getLoanOrderCount();
     }
-
-
-
 }
