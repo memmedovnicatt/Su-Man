@@ -7,9 +7,12 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: root
+    hikari:
+      initializationFailTimeout: 0    # DB hazır olmayanda app dərhal ölməsin
+      connectionTimeout: 30000        # 30 saniyə retry etsin
   jpa:
     hibernate:
-      ddl-auto: update   # testdə "create-drop", amma production üçün "update"
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
