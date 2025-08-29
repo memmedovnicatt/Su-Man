@@ -20,4 +20,11 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<List<Customer>> findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
     boolean existsByPhoneNumber(String phoneNumber);
+
+    @Query("select count (c) from Customer c where c.loanCarboyCount>0")
+    Long findByLoanCarboyCount();
+
+    @Query("select c from Customer c where c.loanCarboyCount>0")
+    List<Customer> findByLoanCarboyCountGreaterThanZero();
+
 }

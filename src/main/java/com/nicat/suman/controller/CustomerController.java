@@ -3,20 +3,13 @@ package com.nicat.suman.controller;
 
 import com.nicat.suman.model.dto.request.CustomerAddRequest;
 import com.nicat.suman.model.dto.request.CustomerUpdateRequest;
-import com.nicat.suman.model.dto.response.CustomerAddResponse;
-import com.nicat.suman.model.dto.response.CustomerListResponse;
-import com.nicat.suman.model.dto.response.CustomerResponse;
-import com.nicat.suman.model.dto.response.CustomerSearchResponse;
+import com.nicat.suman.model.dto.response.*;
 import com.nicat.suman.service.CustomerService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.repository.config.RepositoryConfigurationSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -93,5 +86,14 @@ public class CustomerController {
         return ResponseEntity.ok(customerListResponses);
     }
 
-    //borcu olan musterileri getiren endpoint
+    @GetMapping("/loan/carboy/count")
+    public Long getLoanCarboyCount() {
+        return customerService.getLoanCarboyCount();
+    }
+
+    @GetMapping("/carboy/loans")
+    public ResponseEntity<List<CustomerLoanResponse>> getCarboyLoans() {
+        List<CustomerLoanResponse> list = customerService.getCarboyLoans();
+        return ResponseEntity.ok(list);
+    }
 }

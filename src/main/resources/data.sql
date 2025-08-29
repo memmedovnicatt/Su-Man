@@ -1,10 +1,10 @@
-INSERT INTO users (name, surname, username, password, phone_number, created_at, role)
-VALUES ('Nicat', 'Qasımov', 'user1', '$2a$12$RTNq7JGW68FJDTsc3bGxmeyQueGFqAOh5NByss/JyvCglxKYZQ6zi', '0501234567', '2024-03-15 12:30:00', 'ADMIN');
-
-
-INSERT INTO customers (name, surname, address, phone_number, price, currency)
-VALUES ('Ali', 'Məmmədov', 'Bakı şəhəri, Nəsimi', '0511234567', 5.0, 'AZN');
-
-
-INSERT INTO orders (customer_id, courier_id, carboy_count, price, order_status, order_date)
-VALUES (1, 1, 3, 15.0, 'PENDING', '2025-08-07');
+-- INSERT INTO users (name, surname, username, password, phone_number, created_at, role)
+-- VALUES ('Nicat', 'Qasımov', 'user1', '$2a$12$RTNq7JGW68FJDTsc3bGxmeyQueGFqAOh5NByss/JyvCglxKYZQ6zi', '0501234567', '2024-03-15 12:30:00', 'ADMIN');
+--
+--
+-- INSERT INTO customers (name, surname, address, phone_number, price, currency)
+-- VALUES ('Ali', 'Məmmədov', 'Bakı şəhəri, Nəsimi', '0511234567', 5.0, 'AZN');
+--
+--
+-- INSERT INTO orders (customer_id, courier_id, carboy_count, price, order_status, order_date)
+-- VALUES (1, 1, 3, 15.0, 'PENDING', '2025-08-07');

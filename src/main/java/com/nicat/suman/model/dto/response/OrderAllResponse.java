@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class OrderAllResponse {
+    Long id;
     String customerFullName;
     String customerPhoneNumber;
     String customerAddress;
@@ -25,5 +26,4 @@ public class OrderAllResponse {
 
     @Enumerated(EnumType.STRING)
     OrderStatus orderStatus;
-
 }

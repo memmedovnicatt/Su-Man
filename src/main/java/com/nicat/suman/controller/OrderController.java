@@ -9,6 +9,7 @@ import com.nicat.suman.model.dto.response.OrderUpdateResponse;
 import com.nicat.suman.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "Order Controller",
@@ -63,5 +66,17 @@ public class OrderController {
         List<OrderAllResponse> orderAllResponse = orderService.getAll();
         return ResponseEntity.ok(orderAllResponse);
     }
+
+    @GetMapping("/count")
+    public Long getOrderCount(){
+        return orderService.countOrders();
+    }
+
+    @GetMapping("/loan/count")
+    public Long getLoanOrderCount(){
+        return orderService.getLoanOrderCount();
+    }
+
+
 
 }

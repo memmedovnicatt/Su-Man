@@ -15,12 +15,18 @@ import com.nicat.suman.model.dto.response.OrderResponse;
 import com.nicat.suman.model.dto.response.OrderUpdateResponse;
 import com.nicat.suman.model.enums.OrderStatus;
 import com.nicat.suman.model.exception.NotFoundException;
+import com.nicat.suman.util.ExcelExport;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,6 +39,7 @@ public class OrderService {
     UserRepository userRepository;
     OrderRepository orderRepository;
     OrderMapper orderMapper;
+    ExcelExport excelExport;
 
     public OrderAddResponse add(OrderAddRequest orderAddRequest) {
         log.info("add method was started for OrderService with this request:{}",
@@ -127,6 +134,7 @@ public class OrderService {
         }
         return orders.stream()
                 .map(o -> new OrderAllResponse(
+                        o.getId(),
                         o.getCustomer().getName() + " " + o.getCustomer().getSurname(),
                         o.getCustomer().getPhoneNumber(),
                         o.getCustomer().getAddress(),
@@ -138,4 +146,15 @@ public class OrderService {
                 ))
                 .toList();
     }
+
+    public Long countOrders() {
+        log.info("countOrders method was started for OrderService");
+        return orderRepository.count();
+    }
+
+    public Long getLoanOrderCount() {
+        log.info("getLoanOrderCount method was started for OrderService");
+        return orderRepository.countByPaymentMethod();
+    }
+
 }

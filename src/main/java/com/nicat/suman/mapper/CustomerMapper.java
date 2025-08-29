@@ -2,15 +2,13 @@ package com.nicat.suman.mapper;
 
 import com.nicat.suman.dao.entity.Customer;
 import com.nicat.suman.model.dto.request.CustomerUpdateRequest;
-import com.nicat.suman.model.dto.response.CustomerAddResponse;
-import com.nicat.suman.model.dto.response.CustomerListResponse;
-import com.nicat.suman.model.dto.response.CustomerResponse;
-import com.nicat.suman.model.dto.response.CustomerSearchResponse;
+import com.nicat.suman.model.dto.response.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
@@ -26,4 +24,6 @@ public interface CustomerMapper {
     CustomerResponse toCustomerResponse(Customer currenCustomer);
 
     List<CustomerListResponse> toCustomerListResponse(List<Customer> customerList);
+
+    List<CustomerLoanResponse> toLCustomerLoanResponse(List<Customer> listCustomer);
 }

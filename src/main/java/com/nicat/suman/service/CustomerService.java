@@ -5,10 +5,7 @@ import com.nicat.suman.dao.repository.CustomerRepository;
 import com.nicat.suman.mapper.CustomerMapper;
 import com.nicat.suman.model.dto.request.CustomerAddRequest;
 import com.nicat.suman.model.dto.request.CustomerUpdateRequest;
-import com.nicat.suman.model.dto.response.CustomerAddResponse;
-import com.nicat.suman.model.dto.response.CustomerListResponse;
-import com.nicat.suman.model.dto.response.CustomerResponse;
-import com.nicat.suman.model.dto.response.CustomerSearchResponse;
+import com.nicat.suman.model.dto.response.*;
 import com.nicat.suman.model.exception.AlreadyExistsException;
 import com.nicat.suman.model.exception.NotFoundException;
 import com.nicat.suman.util.ExcelExport;
@@ -25,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +47,7 @@ public class CustomerService {
                 .price(customerAddRequest.getPrice())
                 .address(customerAddRequest.getAddress())
                 .createAt(LocalDateTime.now())
+                .loanCarboyCount(0L)
                 .status(1)
                 .build();
         customerRepository.save(customer);
@@ -133,5 +132,22 @@ public class CustomerService {
             throw new NotFoundException("customer not found");
         }
         return customerMapper.toCustomerListResponse(customerList);
+    }
+
+    public Long getLoanCarboyCount() {
+        log.info("getLoanCarboyCount method was started for CustomerService");
+        Long loanCarboyCount = customerRepository.findByLoanCarboyCount();
+        log.info("loanCarboyCount:{}", loanCarboyCount);
+        return loanCarboyCount;
+    }
+
+    public List<CustomerLoanResponse> getCarboyLoans() {
+        log.info("getCarboyLoans method was started for CustomerService");
+        List<Customer> listCustomer = customerRepository.findByLoanCarboyCountGreaterThanZero();
+        if (listCustomer.isEmpty()) {
+            log.info("loan carboy was not found for customer");
+            throw new NotFoundException("borclu musteri tapilmadi");
+        }
+        return customerMapper.toLCustomerLoanResponse(listCustomer);
     }
 }
