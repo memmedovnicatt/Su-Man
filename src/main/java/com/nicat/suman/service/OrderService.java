@@ -151,10 +151,4 @@ public class OrderService {
         log.info("countOrders method was started for OrderService");
         return orderRepository.count();
     }
-
-    public Long getLoanOrderCount() {
-        log.info("getLoanOrderCount method was started for OrderService");
-        return orderRepository.countByPaymentMethod();
-    }
-
 }
