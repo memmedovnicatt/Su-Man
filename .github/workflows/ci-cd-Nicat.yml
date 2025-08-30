@@ -3,10 +3,10 @@ name: CI/CD Nicat
 on:
   push:
     branches:
-      - main
+      - main   # Production-a merge olunanda işə düşəcək
 
 jobs:
-  build-and-test:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,18 +35,18 @@ jobs:
         run: docker push agilazizovf/sumanback
 
   deploy:
-    needs: build-and-test
+    needs: build-and-push
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to Ubuntu Server via SSH
+      - name: Deploy via SSH to Ubuntu Server
         uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull agilazizovf/sumanback
-            docker stop sumanback || true
-            docker rm sumanback || true
-            docker run -d --name sumanback -p 9090:9090 agilazizovf/sumanback
+            cd /home/ubuntu/suman
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d
