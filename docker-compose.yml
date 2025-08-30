@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   postgres-db:
     image: postgres:16
@@ -15,9 +17,7 @@ services:
       - suman-network
 
   suman-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: agilazizovf/sumanback   # CI/CD bunu push edir
     container_name: suman-app
     restart: always
     ports:
