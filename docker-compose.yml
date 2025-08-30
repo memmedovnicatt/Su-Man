@@ -26,7 +26,7 @@ services:
       - postgres-db
     environment:
       SPRING_PROFILES_ACTIVE: production
-      SPRING_DATASOURCE_URL: jdbc:postgresql://62.171.154.6:5433/SuManDB
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres-db/SuManDB
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: root
     networks:
