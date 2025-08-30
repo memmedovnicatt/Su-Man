@@ -46,7 +46,6 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            mkdir -p /home/ubuntu/suman
             cd /home/ubuntu/suman
             docker compose down
             docker compose pull
